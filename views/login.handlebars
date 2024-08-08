@@ -1,11 +1,18 @@
-<h1>Fetch</h1>
-<img src="" alt="Logo" width="400" height="600">
-<form action="" id="login-form">
-  <label for="login-email">email</label>
-  <input type="text" name="email" id="login-email" />
-  <label for="login-password">password</label>
-  <input type="password" name="password" id="login-password" />
-  <button>Sign In</button>
-</form>
-<button>Don't have an account? Sign Up!</button>
+<div class="login-form">
+  <h1>Fetch Login</h1>
+  <form method="POST">
+    <div>
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username" required>
+    </div>
+    <div>
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" required>
+    </div>
+    <div>
+      <button type="submit">Login</button>
+    </div>
+  </form>
+</div>
+
 <script src="/js/login.js"></script>
