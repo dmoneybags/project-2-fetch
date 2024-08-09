@@ -3,7 +3,7 @@
 ## Screenshot
 ![Fetch Login](<assets/Fetch Login.PNG>)
 ## Description
-Thank you for your interest in Fetch! A new social platform that allows and encourages developers, programmers and all sorts of coding enthusiasts to post and share code!. Create/manage your profile, post code, follow others, and like other coder posts. 
+Thank you for your interest in Fetch! A new social platform that allows and encourages developers, programmers, and all sorts of coding enthusiasts, to post and share code!. Create/manage your profile, post code, follow others, and like other coder posts. 
 <h4>This full stack application utilizes</h4> <li>Node.js</li> <li>Express.js</li> <li>PostgreSQL</li> <li>Sequelize ORM</li> <li>Handlebars.js</li>
 
 ## Installation
