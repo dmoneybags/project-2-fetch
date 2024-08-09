@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css">
+    <link rel="stylesheet" href="public/css/myaccount.css">
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="#">
+                <strong>Fetch</strong>
+            </a>
+            <div class="navbar-burger burger" data-target="navbarMenu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        <div id="navbarMenu" class="navbar-menu">
+            <div class="navbar-start">
+                <a class="navbar-item" href="index.html">Following</a>
+                <a class="navbar-item" href="explore.html">Explore</a>
+                <a class="navbar-item" href="myaccount.html">My Account</a> <!-- Corrected link -->
+            </div>
+            <div class="navbar-end">
+                <div class="navbar-item">
+                    <div class="buttons">
+                        <a class="button is-light" href="#">Log in</a>
+                        <a class="button is-primary" href="#">Sign up</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- User Information Section -->
+    <section class="section">
+        <div class="container">
+            <div class="columns is-vcentered">
+                <div class="column is-one-third">
+                    <figure class="image is-128x128">
+                        <img class="is-rounded" src="https://via.placeholder.com/128" alt="User photo">
+                    </figure>
+                </div>
+                <div class="column">
+                    <h1 class="title">Full Name</h1>
+                    <h2 class="subtitle">@UserID</h2>
+                    <p><strong>Followers</strong>: 100 | <strong>Following</strong>: 150</p>
+                    <a href="#" class="button is-link">Edit Account</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- User Posts Section -->
+    <section class="section">
+        <div class="container">
+            <h2 class="title">Your Posts</h2>
+            <div class="columns is-multiline">
+                <!-- Example Post 1 -->
+                <div class="column is-one-third">
+                    <div class="box">
+                        <article class="media">
+                            <figure class="media-left">
+                                <p class="image is-64x64">
+                                    <img src="https://via.placeholder.com/64" alt="Code Thumbnail">
+                                </p>
+                            </figure>
+                            <div class="media-content">
+                                <div class="content">
+                                    <p>
+                                        <strong>Post Title</strong>
+                                        <br>
+                                        Short description of the post...
+                                    </p>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+                <!-- Repeat for other posts -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="content has-text-centered">
+            <p>
+                <strong>Fetch</strong> by <a href="#">Your Name</a>. The source code is licensed
+                <a href="#">MIT</a>.
+            </p>
+        </div>
+    </footer>
+
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+
+            if ($navbarBurgers.length > 0) {
+                $navbarBurgers.forEach(el => {
+                    el.addEventListener('click', () => {
+                        const target = el.dataset.target;
+                        const $target = document.getElementById(target);
+                        el.classList.toggle('is-active');
+                        $target.classList.toggle('is-active');
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+</html>
