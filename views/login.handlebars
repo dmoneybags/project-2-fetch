@@ -1,24 +1,33 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
 
 <body class="is-justify-content-center has-text-centered">
-  <h1 class="is-size-1 has-text-black is-family-monospace container">Fetch Login</h1>
-  <div class="is-flex has-background-black-bis pt-6">
-    <figure class="image">
-      <img class="./assets/TestLogo.jpg" alt="Logo">
+  <h1 class="is-size-1 has-text-black is-family-monospace container pb-3">Fetch Login</h1>
+
+  <div class="columns is-flex has-background-black-bis pt-6">
+    <figure class="image column">
+      <img class="image px-4" src="../assets/FetchLogo.png" alt="Logo">
     </figure>
-    <form class="container has-text-centered" method="POST">
+    <form class="column has-text-centered" method="POST">
+
       <div class="pl-1 pb-6">
+
+
         <div class="box">
           <label class="is-size-4 has-text-black" for="username">Username:</label>
           <input class="input is large" type="text" id="username" name="username" required>
         </div>
+
+
         <div class="box">
           <label class="is-size-4 has-text-black" for="password">Password:</label>
           <input class="input is large" type="password" id="password" name="password" required>
         </div>
+
       </div>
+
     </form>
   </div>
+
   <div>
     <button class="button is-large is-black my-6" type="submit">Login</button>
   </div>
