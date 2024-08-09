@@ -13,9 +13,9 @@ document.querySelector("#login-form").addEventListener("submit", (e) => {
     },
   }).then((res) => {
     if (res.ok) {
-      location.href = "/secret";
+      location.href = "/home";
     } else {
-      alert("trumpet sound");
+      alert("Invaid usernamer and/or password");
     }
   });
 });
