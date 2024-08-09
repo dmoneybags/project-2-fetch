@@ -1,4 +1,4 @@
-const {sequelize} = require('../config/connection');
+const sequelize = require('../config/connection');
 const { DataTypes } = require('sequelize');
 
 const Post = sequelize.define('Post', {
@@ -11,7 +11,7 @@ const Post = sequelize.define('Post', {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-            model: UserObj,
+            model: 'UserObj',
             key: 'ID'
         }
     },

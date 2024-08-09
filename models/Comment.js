@@ -1,4 +1,4 @@
-const {sequelize} = require('../config/connection');
+const sequelize = require('../config/connection');
 const { DataTypes } = require('sequelize');
 
 const Comment = sequelize.define('Comment', {
@@ -11,7 +11,7 @@ const Comment = sequelize.define('Comment', {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-            model: UserObj,
+            model: "UserObj",
             key: 'ID'
         }
     },
@@ -19,7 +19,7 @@ const Comment = sequelize.define('Comment', {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-            model: Post,
+            model: 'Post',
             key: 'ID'
         }
     },
@@ -31,3 +31,5 @@ const Comment = sequelize.define('Comment', {
     tableName: 'Comment',
     timestamps: false
 });
+
+module.exports = Comment;
