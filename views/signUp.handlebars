@@ -1,0 +1,35 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
+
+<body class="has-background-black-bis has-text-centered px-6">
+    <h1 class="is-size-1 has-text-white is-family-monospace">Fetch Sign Up!</h1>
+    <hr>
+    <form id="has-text-centered" method="POST">
+        <div class="box">
+            <label class="is-size-4 has-text-black" for="userId">User Id</label>
+            <input class="input is large" type="text" id="userId" name="userId" placeholder="Enter a user ID" required>
+        </div>
+        <div class="box">
+            <label class="is-size-4 has-text-black" for="">First Name:</label>
+            <input class="input is large" type="text" id="firstName" name="firstName"
+                placeholder="Enter your first name" required>
+        </div>
+        <div class="box">
+            <label class="is-size-4 has-text-black" for="lastName">Last Name:</label>
+            <input class="input is large" type="text" id="lastName" name="lastName" placeholder="Enter your last name"
+                required>
+        </div>
+        <div class="box">
+            <label class="is-size-4 has-text-black" for="email">Email:</label>
+            <input class="input is large" type="email" id="email" name="email" placeholder="Enter your email address"
+                required>
+        </div>
+        <div class="box">
+            <label class="is-size-4 has-text-black" for="password">Password:</label>
+            <input class="input is large" type="password" id="password" name="password"
+                placeholder="Enter your password" required>
+        </div>
+        <div class="button is-large is-black mb-6">
+            <button type="submit">CREATE USER</button>
+        </div>
+    </form>
+</body>
