@@ -29,7 +29,7 @@ const UserObj = sequelize.define('UserObj', {
         allowNull: true
     },
     picture: {
-        type: DataTypes.BLOB,
+        type: DataTypes.STRING(30),
         allowNull: true
     },
     githubUrl: {

@@ -1,0 +1,31 @@
+<link rel="stylesheet" href="/css/createPost.css">
+<p id="create-post-title" class="is-size-2 has-text-link">Create a Post</p>
+<form id="create-post-form" class="box">
+    <p class="is-size-4 has-text-grey" >Title:</p>
+    <input
+    class="input is-link"
+    type="text"
+    placeholder="My Awesome Element"
+    id="title-input"
+    />
+    <hr>
+    <p class="is-size-4 has-text-grey" >Description:</p>
+    <textarea 
+    class="textarea is-link" 
+    placeholder="Super awesome element I made with my imaginary friend"
+    id="description-input"></textarea>
+    <hr>
+    <p class="is-size-4 has-text-link" >Css:</p>
+    <textarea 
+    class="textarea code-input has-text-link" 
+    placeholder="Write your css here..."
+    id="css-input"></textarea>
+    <hr>
+    <p class="is-size-4 has-text-link" >HTML:</p>
+    <textarea 
+    class="textarea code-input has-text-link" 
+    placeholder="Write your css here.."
+    id="html-input"></textarea>
+    <button id="submit-post-btn" class="button is-success" onclick="createPost(event)">Submit Post</button>
+</form>
+<script src="/js/createPost.js"></script>

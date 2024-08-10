@@ -1,0 +1,39 @@
+
+<body>
+    <link rel="stylesheet" href="/css/homePage.css">
+    <div id="main-content">
+        <a class="button is-link is-dark" id="create-post-btn" href="/createPost">Create Post</a>
+    </div>
+    <hr>
+    {{#each Posts}}
+        <div class="box post">
+            <p class="is-size-3">{{Title}}</p>
+            <hr>
+            <a href="/user/{{UserObj.ID}}">by {{UserObj.firstName}}</a>
+            <p class="post-description">{{Description}}</p>
+            <div class="box result">
+                <button class="button is-ghost">Result</button>
+                <hr>
+                <div id="result{{ID}}">
+
+                </div>
+            </div>
+            <div class="box css codeBlock">
+                <button class="button is-ghost">CSS</button>
+                <hr>
+                <pre><code>{{{Stylesheet}}}</code></pre>
+            </div>
+            <div class="box html codeBlock">
+                <button class="button is-ghost">HTML</button>
+                <hr>
+                <pre><code>{{Code}}</code></pre>
+            </div>
+        </div>
+    {{/each}}
+    <script src="/js/htmlRender.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            loadPosts({{{ StringPosts }}});
+        })
+    </script>
+</body>

@@ -13,7 +13,8 @@ Post.belongsTo(UserObj, {
 });
 
 Post.hasMany(Like, {
-    foreignKey: 'PostID'
+    foreignKey: 'PostID',
+    as: 'Like'
 });
 
 Post.hasMany(Comment, {

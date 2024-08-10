@@ -1,0 +1,24 @@
+.post{
+    margin: 10px;
+}
+.post-description{
+    margin-top: 10px;
+}
+.css {
+    margin-top: 10px;
+    font-size: 0.75rem;
+}
+.html {
+    font-size: 0.75rem;
+}
+.result {
+    margin-top: 10px;
+}
+#main-content{
+    padding: 2.5%;
+}
+#create-post-btn{
+    font-size: x-large;
+    margin-top: -30px;
+    margin-bottom: -30px;
+}
