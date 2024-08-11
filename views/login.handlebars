@@ -1,29 +1,32 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
-
+<link rel="stylesheet" href="/css/login.css">
 <body class="is-justify-content-center has-text-centered">
-  <h1 class="is-size-1 has-text-black is-family-monospace container">Fetch Login</h1>
+  <h1 class="is-size-1 is-family-monospace container">Fetch Login</h1>
   <div class="is-flex has-background-black-bis pt-6">
-    <figure class="image">
-      <img class="./assets/TestLogo.jpg" alt="Logo">
-    </figure>
     <form class="container has-text-centered" method="POST">
-      <div class="pl-1 pb-6">
-        <div class="box">
-          <label class="is-size-4 has-text-black" for="username">Username:</label>
-          <input class="input is large" type="text" id="username" name="username" required>
+      <div class="box typing-text-container">
+        <div class="typing-text">
+          Show off buttons to friends
+          Give your students a challenge
+          Get input from the community
+          Get ideas from others
+          Learn how to write CSS
         </div>
-        <div class="box">
-          <label class="is-size-4 has-text-black" for="password">Password:</label>
-          <input class="input is large" type="password" id="password" name="password" required>
-        </div>
+      </div>
+      <div class="box" id="loginForm">
+        <label class="is-size-4" for="username">Email:</label>
+        <input class="input is large" type="text" id="email" name="email" required>
+        <label class="is-size-4" for="password">Password:</label>
+        <input class="input is large" type="password" id="password" name="password" required>
       </div>
     </form>
   </div>
   <div>
-    <button class="button is-large is-black my-6" type="submit">Login</button>
+    <button id="submitLogin" class="button is-large is-link my-6" type="submit">Login</button>
   </div>
   <div>
-    <button class="has-text-link">Don't have an account? Sign Up!</button>
+    <button class="has-text-link p-4">Don't have an account? Sign Up!</button>
   </div>
-  <script src="/js/login.js"></script>
 </body>
+<script src="/js/createPost.js"></script>
+<script src="/js/login.js"></script>

@@ -1,0 +1,26 @@
+label {
+    margin: 20px 0 !important; /* Forces the margin to be applied */
+}
+.typing-text-container {
+    margin: 20px;
+}
+.typing-text {
+    font-family: 'Courier New', monospace;
+    font-size: 16px;
+    border-right: 2px solid #000;
+    white-space: nowrap;
+    overflow: hidden;
+    animation: typing 16s steps(172, end) infinite, blink-caret .75s step-end infinite;
+}
+@keyframes typing {
+    from { width: 0; }
+    to { width: 100%; }
+}
+@keyframes blink-caret {
+    from, to { border-color: transparent; }
+    50% { border-color: black; }
+}
+#loginForm{
+    max-width: 500px;
+    margin: auto;
+}

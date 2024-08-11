@@ -7,7 +7,6 @@ const { promisify } = require('util');
 const bcrypt = require('bcrypt');
 require('dotenv').config();
 
-const jwtVerifyAsync = promisify(jwt.verify)
 
 // Middleware to parse JSON request body
 app.use(express.json());
@@ -20,19 +19,24 @@ router.post("/register", async (req, res) => {
     const requestBody = req.body;
     const userData = requestBody["user"];
     if ((await crud.readUserByEmail(userData["email"]))){
-        return res.status(409).json({ error: 'User already exists' });
+        return res.status(409).json({ error: 'Username already exists' });
+    }
+    if ((await crud.readUserByUsername(userData["firstName"]))){
+        return res.status(409).json({ error: 'Username already exists' });
     }
     userData["password"] = bcrypt.hashSync(userData["password"], 4);
     const user = await crud.createUser(userData);
     console.log("User created!");
     //CREATE TOKEN
     const token = jwt.sign({userId: user.ID}, process.env.SECRET_KEY, { expiresIn: '1h' });
-    return res.status(200).json(user);
+    return res.status(200).json({ message: "User signed up", user: user, token: token})
 })
 router.post("/login", async (req, res) => {
     console.log("Recieved request to login");
     const requestBody = req.body;
+    console.log(requestBody);
     const email = requestBody["email"];
+    console.log(email);
     const password = requestBody["password"];
     const user = await crud.readUserByEmail(email);
     if (!user){

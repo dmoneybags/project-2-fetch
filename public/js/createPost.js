@@ -24,18 +24,16 @@ const createPost = (event) => {
         Stylesheet: cssEl.value
     }
     const token = localStorage.getItem("token");
-    fetch("/api/db/createPost", {
+    fetch(`/api/db/createPost?authorization=${token}`, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
-            'authorization': token,
+            "Content-Type": "application/json"
         },
         body: JSON.stringify({post: post}),
     })
     .then((response) => {
         if (response.ok) {
-            //will change to grab userId from localstorage
-            window.location.href = '/user/id';
+            window.location.href = `/myAccount?authorization=${token}`;
         } else {
             showError('Could not create post!');
         }
@@ -48,6 +46,9 @@ const createPost = (event) => {
 function showError(text) {
     const notification = document.createElement('div');
     notification.className = 'notification is-danger sticky-notification';
+    notification.style.position = "sticky";
+    notification.style.top = 0;
+    notification.style.zIndex = 9999;
     notification.textContent = text;
     
     document.body.prepend(notification);

@@ -78,7 +78,21 @@ async function readUserByEmail(email){
         console.log(user);
         return user ? user.toJSON() : null
     } catch (error){
-
+        console.log("Received error of " + error + " trying to read user");
+        throw new Error(error);
+    }
+}
+async function readUserByUsername(username){
+    try {
+        const user = await UserObj.findOne({
+            where: {firstName: username}
+        });
+        console.log("Read user of: ");
+        console.log(user);
+        return user ? user.toJSON() : null
+    } catch (error){
+        console.log("Received error of " + error + " trying to read user");
+        throw new Error(error);
     }
 }
 async function createPost(postData) {
@@ -116,6 +130,7 @@ async function updatePost(postId, updatedValues) {
 async function readPosts(){
     try {
         const posts = await Post.findAll({
+            order: [["ID", 'DESC']],
             attributes: [
                 'ID',
                 'Title',
@@ -149,6 +164,7 @@ async function readPosts(){
 async function readUserPosts(userId){
     try {
         const posts = await Post.findAll({
+            order: [["ID", 'DESC']],
             attributes: [
                 'ID',
                 'Title',
@@ -184,6 +200,7 @@ async function readFollowingPosts(userId){
     const followingIds = await readFollowingIds(userId);
     try {
         const posts = await Post.findAll({
+            order: [["ID", 'DESC']],
             attributes: [
                 'ID',
                 'Title',
@@ -193,7 +210,7 @@ async function readFollowingPosts(userId){
                 [fn('COUNT', col('Like.ID')), 'likeCount']
             ],
             where: {
-                UserId: {
+                UserID: {
                   [Op.in]: followingIds
                 }
             },
@@ -207,7 +224,9 @@ async function readFollowingPosts(userId){
             },
             {
                 model: Comment
-            }]
+            }],
+            group: ['Post.ID', 'Post.Title', 'Post.Description', 
+                'Post.Code', 'Post.Stylesheet', 'UserObj.ID', 'Comments.ID']
         });
         const desrializedPosts = posts.map(deserializePost);
         return desrializedPosts;
@@ -286,7 +305,7 @@ async function deleteComment(commentId) {
 async function addFollowing(followerId, followingId){
     try {
         const relationshipData = {
-            FollowerId: followerId,
+            FollowerID: followerId,
             FollowingID: followingId
         }
         const createdRelationship = await UserFollowingRelationship.create(relationshipData);
@@ -302,7 +321,7 @@ async function removeFollowing(followerId, followingId) {
     try {
         const result = await UserFollowingRelationship.destroy({
             where: {
-                FollowerId: followerId,
+                FollowerID: followerId,
                 FollowingID: followingId
             }
         });
@@ -325,6 +344,7 @@ module.exports = {
     updateUser,
     readUser,
     readUserByEmail,
+    readUserByUsername,
     createPost,
     deletePost,
     updatePost,

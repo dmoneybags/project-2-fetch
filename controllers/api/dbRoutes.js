@@ -2,24 +2,10 @@ const router = require("express").Router();
 const express = require('express');
 const crud = require('../../db/CRUDoperations');
 const jwt = require('jsonwebtoken');
-const { promisify } = require('util');
 require('dotenv').config();
-
-const jwtVerifyAsync = promisify(jwt.verify);
+const verifyToken = require('./verifyToken');
 
 const DEBUG = true;
-
-async function verifyToken(req){
-    const token = req.headers['authorization'];
-    try {
-        const decoded = await jwtVerifyAsync(token, process.env.SECRET_KEY);
-        console.log('Decoded token:', decoded);
-        return decoded;
-    } catch (error) {
-        console.error('Token verification failed:', error);
-        return null;
-    }
-}
 
 router.post("/createPost", async (req, res) => {
     const decoded = await verifyToken(req);
@@ -66,33 +52,28 @@ router.post("/addComment", async (req, res) => {
 })
 router.post("/addFollower", async (req, res) => {
     const decoded = await verifyToken(req);
-    if (!decoded && !DEBUG){
+    if (!decoded){
         return res.status(401).json({ message: "INVALID TOKEN"});
     }
     console.log("Recieved request to add follower");
-    const requestBody = req.body;
-    const followerData = requestBody["followerData"];
+    const followerData = req.body;
     followerData["followerId"] = decoded["userId"];
+    console.log(followerData);
     const createRelationship = await crud.addFollowing(followerData["followerId"], followerData["followingId"]);
     return res.status(200).json({ message: "Created following relationship", post: createRelationship.toJSON()});
 })
 router.post("/removeFollower", async (req, res) => {
     const decoded = await verifyToken(req);
-    if (!decoded && !DEBUG) {
+    if (!decoded) {
         return res.status(401).json({ message: "INVALID TOKEN" });
     }
     console.log("Received request to remove follower");
-    const requestBody = req.body;
-    const followerData = requestBody["followerData"];
+    const followerData = req.body;
     followerData["followerId"] = decoded["userId"];
     const deleteRelationship = await crud.removeFollowing(followerData["followerId"], followerData["followingId"]);
-    return res.status(200).json({ message: "Removed following relationship", post: deleteRelationship.toJSON() });
+    return res.status(200).json({ message: "Removed following relationship", post: deleteRelationship });
 });
 router.get("/readAllPosts", async (req, res) => {
-    const decoded = await verifyToken(req);
-    if (!decoded){
-        return res.status(401).json({ message: "INVALID TOKEN"});
-    }
     console.log("Recieved request to read all posts");
     const posts = await crud.readPosts();
     return res.status(200).json({ message: "Sucessfully read posts", post: posts});

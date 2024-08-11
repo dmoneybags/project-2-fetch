@@ -1,18 +1,18 @@
 let isFollowing = '';
 const unfollow = () => {
     const token = localStorage.getItem("token");
-    fetch("/api/db/removeFollower", {
+    const followingBtnEl = document.getElementById("followBtn");
+    const followingId = followingBtnEl.dataset.id;
+    fetch(`/api/db/removeFollower?authorization=${token}`, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
-            'authorization': token,
+            "Content-Type": "application/json"
         },
         body: JSON.stringify({followingId: followingId}),
     })
     .then((response) => {
         if (response.ok){
-            isFollowing = isFollowingValue;
-            const followingBtnEl = document.getElementById("followBtn");
+            isFollowing = false;
             followingBtnEl.textContent = "Follow";
             showSuccess("Unfollowed!");
         } else {
@@ -28,18 +28,18 @@ const unfollow = () => {
 }
 const follow = () => {
     const token = localStorage.getItem("token");
-    fetch("/api/db/addFollower", {
+    const followingBtnEl = document.getElementById("followBtn");
+    const followingId = followingBtnEl.dataset.id;
+    fetch(`/api/db/addFollower?authorization=${token}`, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
-            'authorization': token,
+            "Content-Type": "application/json"
         },
         body: JSON.stringify({followingId: followingId}),
     })
     .then((response) => {
         if (response.ok){
-            isFollowing = isFollowingValue;
-            const followingBtnEl = document.getElementById("followBtn");
+            isFollowing = true;
             followingBtnEl.textContent = "Unfollow";
             showSuccess("Followed!");
         } else {
