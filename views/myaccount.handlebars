@@ -1,0 +1,64 @@
+<!-- User Information Section -->
+<section class="section">
+    <div class="container">
+        <div class="columns is-vcentered">
+            <div class="column is-one-third">
+                <figure class="image is-164x164">
+                    <img class="is-rounded" src="/images/{{User.picture}}.avif" alt="User photo">
+                </figure>
+            </div>
+            <div class="column">
+                <h1 class="title">@{{User.firstName}}</h1>
+                <h2 class="subtitle">{{User.aboutMe}}</h2>
+                <p class="is-size-4"><strong>Followers</strong>: {{User.followersCount}} | <strong>Following</strong>: {{User.followingCount}}</p>
+                {{#if isSomeoneElse}}
+                <button id="followBtn" class="button is-link" data-id="{{User.ID}}"></button>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- User Posts Section -->
+<section class="section">
+    <div class="container">
+        <h2 class="title">Posts</h2>
+        {{#unless isSomeoneElse}}
+            <button class="button is-link is-dark" id="create-post-btn" onclick="loadCreatePost(event)">Create Post</button>
+        {{/unless}}
+        <hr>
+        <div class="columns is-multiline">
+            <!-- Example Post 1 -->
+            {{#each Posts}}
+                <div class="column is-one-third">
+                    <div class="box">
+                        <article class="media">
+                            <figure class="media-left">
+                            </figure>
+                            <div class="media-content">
+                                <div class="content">
+                                    <p>
+                                        <strong>{{Title}}</strong>
+                                        <br>
+                                        {{Description}}
+                                    </p>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            {{/each}}
+            <!-- Repeat for other posts -->
+        </div>
+    </div>
+</section>
+<script src="/js/account.js"></script>
+<script src="/js/htmlRender.js"></script>
+<script src="/js/reloadWithToken.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+            isFollowing = Boolean({{isFollowing}});
+            const followingBtnEl = document.getElementById("followBtn");
+            followingBtnEl.textContent = isFollowing ? "Unfollow" : "Follow";
+        })
+</script>

@@ -1,0 +1,20 @@
+label {
+    display: block;
+    margin: 15px;
+}
+#signUpForm{
+    max-width: 500px;
+    margin: auto;
+}
+#avatarSelect{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+#avatarSelect figure {
+    margin: 10px;
+    transition: box-shadow 0.3s ease; /
+}
+#avatarSelect img:hover{
+    box-shadow: 0 24px 48px rgba(0, 4, 237, 0.56);
+}

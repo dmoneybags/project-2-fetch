@@ -14,7 +14,7 @@ CREATE TABLE UserObj (
     firstName VARCHAR(30) NOT NULL,
     lastName VARCHAR(30) NOT NULL,
     aboutMe VARCHAR(255),
-    picture bytea,
+    picture VARCHAR(30),
     githubUrl VARCHAR(255)
 );
 
@@ -28,7 +28,7 @@ CREATE TABLE Post (
     CONSTRAINT Post_FK FOREIGN KEY (UserID) REFERENCES UserObj(ID)
 );
 
-CREATE TABLE "Like" (
+CREATE TABLE LikeObj (
     ID SERIAL PRIMARY KEY,
     PostID INTEGER NOT NULL,
     UserID INTEGER NOT NULL,
