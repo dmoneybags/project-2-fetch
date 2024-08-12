@@ -7,33 +7,38 @@ const { promisify } = require('util');
 const bcrypt = require('bcrypt');
 require('dotenv').config();
 
-const jwtVerifyAsync = promisify(jwt.verify)
 
 // Middleware to parse JSON request body
 app.use(express.json());
 
-const { User } = require("../models");
+const { UserObj } = require("../../models");
 
 //Passwords should already be hashed at this point
 router.post("/register", async (req, res) => {
     console.log("Recieved request to register")
     const requestBody = req.body;
     const userData = requestBody["user"];
-    if (!readUserByEmail(email)){
-        return res.status(409).json({ error: 'User already exists' });
+    if ((await crud.readUserByEmail(userData["email"]))){
+        return res.status(409).json({ error: 'Username already exists' });
     }
-    const user = crud.createUser(userData);
+    if ((await crud.readUserByUsername(userData["firstName"]))){
+        return res.status(409).json({ error: 'Username already exists' });
+    }
+    userData["password"] = bcrypt.hashSync(userData["password"], 4);
+    const user = await crud.createUser(userData);
     console.log("User created!");
     //CREATE TOKEN
     const token = jwt.sign({userId: user.ID}, process.env.SECRET_KEY, { expiresIn: '1h' });
-    return res.status(200).json({ message: "User registered", user: user.toJSON()})
+    return res.status(200).json({ message: "User signed up", user: user, token: token})
 })
 router.post("/login", async (req, res) => {
     console.log("Recieved request to login");
     const requestBody = req.body;
+    console.log(requestBody);
     const email = requestBody["email"];
+    console.log(email);
     const password = requestBody["password"];
-    const user = readUserByEmail(email);
+    const user = await crud.readUserByEmail(email);
     if (!user){
         return res.status(401).json({ error: 'Username or password does not match' });
     }
@@ -42,13 +47,12 @@ router.post("/login", async (req, res) => {
         user.password
     );
     if (!validPassword) {
-        res.status(401).json({ error: "Username or password does not match" });
-        return;
+        return res.status(401).json({ error: "Username or password does not match" });
     }
     console.log("User logged in!");
     //CREATE TOKEN
     const token = jwt.sign({userId: user.ID}, process.env.SECRET_KEY, { expiresIn: '1h' });
-    return res.status(200).json({ message: "User logged in", user: user.toJSON(), token: token})
+    return res.status(200).json({ message: "User logged in", user: user, token: token})
 });
 
 module.exports = router;

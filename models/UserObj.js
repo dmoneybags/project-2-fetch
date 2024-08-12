@@ -1,5 +1,6 @@
-const {sequelize} = require('../config/connection');
+const sequelize = require('../config/connection');
 const { DataTypes } = require('sequelize');
+const Post = require('./Post');
 
 const UserObj = sequelize.define('UserObj', {
     ID: {
@@ -28,7 +29,7 @@ const UserObj = sequelize.define('UserObj', {
         allowNull: true
     },
     picture: {
-        type: DataTypes.BLOB,
+        type: DataTypes.STRING(30),
         allowNull: true
     },
     githubUrl: {

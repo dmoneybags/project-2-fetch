@@ -1,4 +1,4 @@
-const {sequelize} = require('../config/connection');
+const sequelize = require('../config/connection');
 const { DataTypes } = require('sequelize');
 
 const UserFollowingRelationship = sequelize.define('UserFollowingRelationship', {
@@ -11,7 +11,7 @@ const UserFollowingRelationship = sequelize.define('UserFollowingRelationship', 
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-            model: UserObj,
+            model: 'UserObj',
             key: 'ID'
         }
     },
@@ -19,7 +19,7 @@ const UserFollowingRelationship = sequelize.define('UserFollowingRelationship', 
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-            model: UserObj,
+            model: 'UserObj',
             key: 'ID'
         }
     }

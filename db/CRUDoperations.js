@@ -1,8 +1,17 @@
 const {sequelize} = require('../config/connection');
-const { Op } = require('sequelize');
-const { UserObj, Post, Like, UserFollowingRelationship, Comment } = require('../models');
+const { Op, fn, col } = require('sequelize');
+require('../models');
+const { Comment, Like, Post, UserFollowingRelationship, UserObj } = require('../models');
 
-export async function createUser(userData) {
+function deserializePost(post){
+    const postData = post["dataValues"]
+    const decoder = new TextDecoder();
+    postData["Code"] = decoder.decode(postData["Code"]);
+    postData["Stylesheet"] = decoder.decode(postData["Stylesheet"]);
+    return postData;
+}
+
+async function createUser(userData) {
     try {
         const user = await UserObj.create(userData);
         console.log("Sucessfully added user returning json below:")
@@ -13,7 +22,7 @@ export async function createUser(userData) {
         throw new Error("Invalid data");
     }   
 }
-export async function deleteUser(userId) {
+async function deleteUser(userId) {
     try {
         const _ = await UserObj.destroy({
             where: { ID: userId}
@@ -23,7 +32,7 @@ export async function deleteUser(userId) {
         throw new Error(error);
     }
 }
-export async function updateUser(userId, updatedValues) {
+async function updateUser(userId, updatedValues) {
     try {
         const _ = await UserObj.update(updatedValues, {
             where: { ID: userId}
@@ -34,18 +43,33 @@ export async function updateUser(userId, updatedValues) {
         throw new Error("Invalid Data");
     }
 }
-export async function readUser(userId){
+async function readUser(userId) {
     try {
         const user = await UserObj.findByPk(userId);
+
+        if (!user) {
+            return null;
+        }
+        const followersCount = await UserFollowingRelationship.count({
+            where: { FollowingID: userId }
+        });
+        const followingCount = await UserFollowingRelationship.count({
+            where: { FollowerID: userId }
+        });
+        const userData = user.toJSON();
+        userData.followersCount = followersCount;
+        userData.followingCount = followingCount;
+
         console.log("Read user of: ");
-        console.log(user);
-        return user ? user.toJSON() : null
-    } catch (error){
-        console.log("Recieved error of " + error + " trying to read user");
+        console.log(userData);
+
+        return userData;
+    } catch (error) {
+        console.log("Received error of " + error + " trying to read user");
         throw new Error(error);
     }
 }
-export async function readUserByEmail(email){
+async function readUserByEmail(email){
     try {
         const user = await UserObj.findOne({
             where: {email: email}
@@ -54,10 +78,24 @@ export async function readUserByEmail(email){
         console.log(user);
         return user ? user.toJSON() : null
     } catch (error){
-
+        console.log("Received error of " + error + " trying to read user");
+        throw new Error(error);
     }
 }
-export async function createPost(postData) {
+async function readUserByUsername(username){
+    try {
+        const user = await UserObj.findOne({
+            where: {firstName: username}
+        });
+        console.log("Read user of: ");
+        console.log(user);
+        return user ? user.toJSON() : null
+    } catch (error){
+        console.log("Received error of " + error + " trying to read user");
+        throw new Error(error);
+    }
+}
+async function createPost(postData) {
     try {
         const post = await Post.create(postData);
         console.log("Sucessfully added post returning json below:")
@@ -68,7 +106,7 @@ export async function createPost(postData) {
         throw new Error("Invalid data");
     }
 }
-export async function deletePost(postId) {
+async function deletePost(postId) {
     try {
         const result = await Post.destroy({
             where: { ID: postId}
@@ -78,7 +116,7 @@ export async function deletePost(postId) {
         throw new Error(error);
     }
 }
-export async function updatePost(postId, updatedValues) {
+async function updatePost(postId, updatedValues) {
     try {
         const _ = await Post.update(updatedValues, {
             where: { ID: postId}
@@ -89,48 +127,90 @@ export async function updatePost(postId, updatedValues) {
         throw new Error("Invalid Data");
     }
 }
-export async function readPosts(){
+async function readPosts(){
     try {
         const posts = await Post.findAll({
+            order: [["ID", 'DESC']],
             attributes: [
                 'ID',
                 'Title',
                 'Description',
                 'Code',
                 'Stylesheet',
-                [fn('COUNT', col('Likes.ID')), 'likeCount']
+                [fn('COUNT', col('Like.ID')), 'likeCount']
             ],
             include: [{
                 model: UserObj
               },
               {
                 model: Like,
+                as: 'Like',  // Explicitly set the alias
                 attributes: []
               },
               {
                   model: Comment
-              }]
+              }],
+              group: ['Post.ID', 'Post.Title', 'Post.Description', 
+                'Post.Code', 'Post.Stylesheet', 'UserObj.ID', 'Comments.ID']
         });
-        return posts
+        console.log(posts);
+        const desrializedPosts = posts.map(deserializePost);
+        return desrializedPosts;
     } catch (error){
         console.log("Recieved error of " + error + " trying to read user");
         throw new Error(error);
     }
 }
-export async function readFollowingPosts(userId){
-    const followingIds = await readFollowingIds(userId);
+async function readUserPosts(userId){
     try {
         const posts = await Post.findAll({
+            order: [["ID", 'DESC']],
             attributes: [
                 'ID',
                 'Title',
                 'Description',
                 'Code',
                 'Stylesheet',
-                [fn('COUNT', col('Likes.ID')), 'likeCount']
+                [fn('COUNT', col('Like.ID')), 'likeCount']
+            ],
+            where: { UserID: userId},
+            include: [{
+                model: UserObj
+              },
+              {
+                model: Like,
+                as: 'Like',  // Explicitly set the alias
+                attributes: []
+              },
+              {
+                  model: Comment
+              }],
+              group: ['Post.ID', 'Post.Title', 'Post.Description', 
+                'Post.Code', 'Post.Stylesheet', 'UserObj.ID', 'Comments.ID']
+        });
+        console.log(posts);
+        const desrializedPosts = posts.map(deserializePost);
+        return desrializedPosts;
+    } catch (error){
+        console.log("Recieved error of " + error + " trying to read user");
+        throw new Error(error);
+    }
+}
+async function readFollowingPosts(userId){
+    const followingIds = await readFollowingIds(userId);
+    try {
+        const posts = await Post.findAll({
+            order: [["ID", 'DESC']],
+            attributes: [
+                'ID',
+                'Title',
+                'Description',
+                'Code',
+                'Stylesheet',
+                [fn('COUNT', col('Like.ID')), 'likeCount']
             ],
             where: {
-                UserId: {
+                UserID: {
                   [Op.in]: followingIds
                 }
             },
@@ -138,17 +218,25 @@ export async function readFollowingPosts(userId){
                 model: UserObj
             },
             {
+                model: Like,
+                as: 'Like',  // Explicitly set the alias
+                attributes: []
+            },
+            {
                 model: Comment
-            }]
+            }],
+            group: ['Post.ID', 'Post.Title', 'Post.Description', 
+                'Post.Code', 'Post.Stylesheet', 'UserObj.ID', 'Comments.ID']
         });
-        return posts
+        const desrializedPosts = posts.map(deserializePost);
+        return desrializedPosts;
     } catch (error) {
         console.log("Recieved error of " + error + " trying to following posts");
         throw new Error(error);
     }
 }
 //Only grabs the ids not the users
-export async function readFollowingIds(userId){
+async function readFollowingIds(userId){
     try {
         const followers = await UserFollowingRelationship.findAll({
             attributes: ['FollowingID'],
@@ -163,7 +251,7 @@ export async function readFollowingIds(userId){
         throw new Error(error);
     }
 }
-export async function addLike(userId, postId){
+async function addLike(userId, postId){
     try {
         const likeData = {
             UserId: userId,
@@ -178,7 +266,7 @@ export async function addLike(userId, postId){
         throw new Error(error);
     }
 }
-export async function deleteLike(userId, postId) {
+async function deleteLike(userId, postId) {
     const condition1 = { UserID: userId };
     const condition2 = { PostId: postId };
     try {
@@ -193,7 +281,7 @@ export async function deleteLike(userId, postId) {
         throw new Error(error);
     }
 }
-export async function addComment(commentData) {
+async function addComment(commentData) {
     try {
         const comment = await Comment.create(commentData);
         console.log("Sucessfully added comment returning json below:")
@@ -204,7 +292,7 @@ export async function addComment(commentData) {
         throw new Error("Invalid data");
     }   
 }
-export async function deleteComment(commentId) {
+async function deleteComment(commentId) {
     try {
         const _ = await Comment.destroy({
             where: { ID: commentId}
@@ -213,4 +301,61 @@ export async function deleteComment(commentId) {
         console.log("Recieved error of " + error + " trying to delete comment");
         throw new Error(error);
     }
+}
+async function addFollowing(followerId, followingId){
+    try {
+        const relationshipData = {
+            FollowerID: followerId,
+            FollowingID: followingId
+        }
+        const createdRelationship = await UserFollowingRelationship.create(relationshipData);
+        console.log("Sucessfully added following returning json below:")
+        console.log(createdRelationship);
+        return createdRelationship;
+    } catch (error) {
+        console.log("Recieved error of " + error + " trying to add a following");
+        throw new Error(error);
+    }
+}
+async function removeFollowing(followerId, followingId) {
+    try {
+        const result = await UserFollowingRelationship.destroy({
+            where: {
+                FollowerID: followerId,
+                FollowingID: followingId
+            }
+        });
+        
+        if (result === 0) {
+            console.log("No relationship found to remove.");
+            return null;
+        }
+        
+        console.log("Successfully removed following relationship.");
+        return result;
+    } catch (error) {
+        console.log("Received error of " + error + " trying to remove a following");
+        throw new Error(error);
+    }
+}
+module.exports = {
+    createUser,
+    deleteUser,
+    updateUser,
+    readUser,
+    readUserByEmail,
+    readUserByUsername,
+    createPost,
+    deletePost,
+    updatePost,
+    readPosts,
+    readUserPosts,
+    readFollowingPosts,
+    readFollowingIds,
+    addLike,
+    deleteLike,
+    addComment,
+    deleteComment,
+    addFollowing,
+    removeFollowing
 }
