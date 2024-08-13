@@ -6,7 +6,7 @@
     </div>
     <hr>
     {{#each Posts}}
-        <div class="box post">
+        <div class="box post" id="post{{ID}}">
             <p class="is-size-3">{{Title}}</p>
             <hr>
             <a href="/user/{{UserObj.ID}}">by {{UserObj.firstName}}</a>
@@ -31,6 +31,7 @@
         </div>
     {{/each}}
     <script src="/js/htmlRender.js"></script>
+    <script src="/js/reloadWithToken.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             loadPosts({{{ StringPosts }}});

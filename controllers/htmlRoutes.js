@@ -5,9 +5,11 @@ const crud = require('../db/CRUDoperations');
 const verifyToken = require('./api/verifyToken');
 router.get("/", async (req, res) => {
     const postObj = await crud.readPosts();
+    const decoded = await verifyToken(req);
     const data = {Posts: postObj, StringPosts: JSON.stringify(postObj)};
     res.render("index.handlebars", {
         layout: 'main',
+        loggedIn: decoded !== null,
         ...data 
     });
 });
@@ -21,6 +23,7 @@ router.get("/following", async (req, res) => {
     const data = {Posts: postObj, StringPosts: JSON.stringify(postObj)};
     res.render("index.handlebars", {
         layout: 'main',
+        loggedIn: true,
         ...data 
     });
 });
@@ -31,7 +34,8 @@ router.get("/createPost", async (req, res) => {
         return;
     }
     res.render("createPost.handlebars", {
-        layout: 'main'
+        layout: 'main',
+        loggedIn: true
     });
 });
 router.get("/user/:id", async (req, res) => {
@@ -60,6 +64,7 @@ router.get("/user/:id", async (req, res) => {
     console.log(data);
     res.render("myaccount.handlebars", {
         layout: 'main',
+        loggedIn: decoded !== null,
         ...data
     });
 })
@@ -79,6 +84,7 @@ router.get("/myAccount", async (req, res) => {
     console.log(data);
     res.render("myaccount.handlebars", {
         layout: 'main',
+        loggedIn: true,
         ...data
     });
 })

@@ -30,7 +30,8 @@
         <div class="columns is-multiline">
             <!-- Example Post 1 -->
             {{#each Posts}}
-                <div class="column is-one-third">
+            <div class="column is-one-third">
+                <a href="/#post{{ID}}">
                     <div class="box">
                         <article class="media">
                             <figure class="media-left">
@@ -46,7 +47,8 @@
                             </div>
                         </article>
                     </div>
-                </div>
+                </a>
+            </div>
             {{/each}}
             <!-- Repeat for other posts -->
         </div>
