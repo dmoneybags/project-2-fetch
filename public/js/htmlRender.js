@@ -23,7 +23,6 @@ function loadPosts(posts){
 }
 const loadCreatePost = (event) => {
     event.preventDefault();
-
     const token = localStorage.getItem("token");
     window.location.href = `/createPost?authorization=${token}`
 };
