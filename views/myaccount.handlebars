@@ -14,6 +14,9 @@
                 {{#if isSomeoneElse}}
                 <button id="followBtn" class="button is-link" data-id="{{User.ID}}"></button>
                 {{/if}}
+                {{#unless isSomeoneElse}}
+                    <button class="button is-link is-dark mt-4" id="create-post-btn" onclick="logOut(event)">Log Out</button>
+                {{/unless}}
             </div>
         </div>
     </div>
@@ -43,6 +46,14 @@
                                         <br>
                                         {{Description}}
                                     </p>
+                                    {{#unless ../isSomeoneElse}}
+                                        <button class="deleteBtn button is-danger is-small" data-id="{{ID}}">
+                                            <span class="icon is-small">
+                                            <i class="fas fa-trash"></i>
+                                            </span>
+                                            <span>Delete</span>
+                                        </button>
+                                    {{/unless}}
                                 </div>
                             </div>
                         </article>
@@ -61,6 +72,8 @@
     document.addEventListener('DOMContentLoaded', () => {
             isFollowing = Boolean({{isFollowing}});
             const followingBtnEl = document.getElementById("followBtn");
-            followingBtnEl.textContent = isFollowing ? "Unfollow" : "Follow";
+            if (followingBtnEl){
+                followingBtnEl.textContent = isFollowing ? "Unfollow" : "Follow";
+            }
         })
 </script>

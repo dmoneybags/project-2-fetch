@@ -26,6 +26,17 @@ router.post("/createPost", async (req, res) => {
     const createdPost = await crud.createPost(postData);
     return res.status(200).json(createdPost);
 })
+router.post("/deletePost", async (req, res) => {
+    const decoded = await verifyToken(req);
+    if (!decoded){
+        return res.status(401).json({ message: "INVALID TOKEN"});
+    }
+    console.log("Recieved request to create post")
+    const requestBody = req.body;
+    const postId = requestBody["id"];
+    await crud.deletePost(postId);
+    return res.status(200).json({message: "deleted post"});
+})
 router.post("/addLike", async (req, res) => {
     const decoded = await verifyToken(req);
     if (!decoded){

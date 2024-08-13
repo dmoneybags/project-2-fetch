@@ -81,6 +81,40 @@ function showError(text) {
     }, 3000);
 }
 const followingBtnEl = document.getElementById("followBtn");
-followingBtnEl.addEventListener('click', () => {
-    setIsFollowing();
-})
+if (followingBtnEl){
+    followingBtnEl.addEventListener('click', () => {
+        setIsFollowing();
+    })
+}
+function logOut(event) {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    window.location.href = `/`
+}
+function deletePost(event, id){
+    const token = localStorage.getItem("token");
+    console.log(event);
+    event.stopPropagation();
+    event.preventDefault();
+    console.log("Deleting post");
+    fetch(`/api/db/deletePost?authorization=${token}`, {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({id: id}),
+    })
+    .then(() => {
+        console.log("Reloading page");
+        location.reload();
+        return false;
+    })
+    .catch((err) => {
+        showError(err);
+    })
+}
+const deleteButtons = document.querySelectorAll('.deleteBtn');
+
+deleteButtons.forEach(button => {
+    button.addEventListener('click', (event) => {deletePost(event, button.dataset.id)});
+});
